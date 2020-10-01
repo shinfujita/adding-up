@@ -13,7 +13,7 @@ rl.on('line', (lineString) => { // lineStringは文字列の意味、つまり�
     const year = parseInt(columns[0]); // 文字列を数値として扱えるようにparseInt関数を使用
     const prefecture = columns[1];
     const popu = parseInt(columns[3]); // 文字列を数値として扱えるようにparseInt関数を使用
-    if (year === 2010 || year === 2015) {
+    if (year === 2010 || year === 2015) { // 2010年と2015年のデータのみ表示（最初の行は非表示）
       /* console.log(year);
       console.log(prefecture);
       console.log(popu); */
@@ -32,6 +32,7 @@ rl.on('line', (lineString) => { // lineStringは文字列の意味、つまり�
         value.popu15 = popu;
       }
       prefectureDataMap.set(prefecture, value);
+      // console.log(value);
   }
   });
   rl.on('close', () => {
@@ -40,11 +41,12 @@ rl.on('line', (lineString) => { // lineStringは文字列の意味、つまり�
       value.change = value.popu15 / value.popu10;
     }
     const rankingArray = Array.from(prefectureDataMap).sort((pair1,pair2) => {
-      return pair2[1].change - pair1[1].change;
+      return pair1[1].change - pair2[1].change;
     });
-    const rankingString = rankingArray.map(([key,value]) => {
-      // return key + ': ' + value.popu10 + '=>' + value.popu15 + ' 変化率:' + value.change;
-      return `${key}: ${value.popu10} -> ${value.popu15} 変化率: ${value.change}`
+    const rankingString = rankingArray.map(([key,value],i) => {
+        // return key + ': ' + value.popu10 + '=>' + value.popu15 + ' 変化率:' + value.change;
+        return `${i + 1}位 ${key}: ${value.popu10} -> ${value.popu15} 変化率: ${value.change}`;
     });
     console.log(rankingString);
+    // console.log(rankingString[0]);
   });
